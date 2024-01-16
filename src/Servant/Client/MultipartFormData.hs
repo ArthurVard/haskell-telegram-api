@@ -29,13 +29,13 @@ import           Data.Typeable                         (Typeable)
 import           Network.HTTP.Client                   hiding (Proxy)
 import qualified Network.HTTP.Client                   as Client
 import           Network.HTTP.Client.MultipartFormData
-import           Network.HTTP.Media
+import           Network.HTTP.Media 
 import           Network.HTTP.Types
 import qualified Network.HTTP.Types                    as H
 import qualified Network.HTTP.Types.Header             as HTTP
 import           Servant.API
-import           Servant.Client
-import qualified Servant.Client.Core                   as Core
+import           Servant.Client                        hiding((//))
+import qualified Servant.Client.Core                   as Core 
 import           Servant.Client.Internal.HttpClient    (catchConnectionError,
                                                         clientResponseToResponse,
                                                         defaultMakeClientRequest)
