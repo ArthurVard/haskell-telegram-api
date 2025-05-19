@@ -1,0 +1,5 @@
+packages: .
+
+
+-- Optional: global GHC options
+-- ghc-options: -Wall

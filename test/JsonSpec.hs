@@ -3,54 +3,64 @@
 module JsonSpec (spec) where
 
 import           Data.Aeson
-import           Data.ByteString.Lazy.UTF8
+import           Data.Aeson.Types (parseMaybe, withObject)
 import qualified Data.Text                 as T
 import           Test.Hspec
-import           Text.JSON.JPath
 import           Web.Telegram.API.Bot
+
 
 spec :: Spec
 spec = do
-  let getType q = jPath (T.unpack "type") (toString (encode q))
+  let getType :: ToJSON a => a -> [String]
+      getType q =
+        case decode (encode q) :: Maybe Value of
+          Just val ->
+            case parseMaybe (withObject "object" (\o -> o .: "type")) val of
+              Just t  -> [T.unpack (t :: T.Text)]
+              Nothing -> ["null"]
+          Nothing -> ["null"]
+
   describe "type of serialized inline query result" $ do
     it "should be article" $
-      getType iq_article `shouldBe` ["\"article\""]
+      getType iq_article `shouldBe` ["article"]
     it "should be photo" $
-      getType iq_photo `shouldBe` ["\"photo\""]
+      getType iq_photo `shouldBe` ["photo"]
     it "should be gif" $
-      getType iq_gif `shouldBe` ["\"gif\""]
+      getType iq_gif `shouldBe` ["gif"]
     it "should be mpeg4_gif" $
-      getType iq_mpeg `shouldBe` ["\"mpeg4_gif\""]
+      getType iq_mpeg `shouldBe` ["mpeg4_gif"]
     it "should be video" $
-      getType iq_video `shouldBe` ["\"video\""]
+      getType iq_video `shouldBe` ["video"]
     it "should be audio" $
-      getType iq_audio `shouldBe` ["\"audio\""]
+      getType iq_audio `shouldBe` ["audio"]
     it "should be contact" $
-      getType iq_contact `shouldBe` ["\"contact\""]
+      getType iq_contact `shouldBe` ["contact"]
     it "should be document" $
-      getType iq_document `shouldBe` ["\"document\""]
+      getType iq_document `shouldBe` ["document"]
     it "should be location" $
-      getType iq_location `shouldBe` ["\"location\""]
+      getType iq_location `shouldBe` ["location"]
     it "should be venue" $
-      getType iq_venue `shouldBe` ["\"venue\""]
+      getType iq_venue `shouldBe` ["venue"]
+
   describe "type of serialized cached inline query result" $ do
     it "should be audio" $
-      getType cached_audio `shouldBe` ["\"audio\""]
+      getType cached_audio `shouldBe` ["audio"]
     it "should be voice" $
-      getType cached_voice `shouldBe` ["\"voice\""]
+      getType cached_voice `shouldBe` ["voice"]
     it "should be video" $
-      getType cached_video `shouldBe` ["\"video\""]
+      getType cached_video `shouldBe` ["video"]
     it "should be document" $
-      getType cached_doc `shouldBe` ["\"document\""]
+      getType cached_doc `shouldBe` ["document"]
     it "should be sticker" $
-      getType cached_sticker `shouldBe` ["\"sticker\""]
+      getType cached_sticker `shouldBe` ["sticker"]
     it "should be mpeg4_gif" $
-      getType cached_mpeg `shouldBe` ["\"mpeg4_gif\""]
+      getType cached_mpeg `shouldBe` ["mpeg4_gif"]
     it "should be gif" $
-      getType cached_gif `shouldBe` ["\"gif\""]
+      getType cached_gif `shouldBe` ["gif"]
     it "should be photo" $
-      getType cached_photo `shouldBe` ["\"photo\""]
+      getType cached_photo `shouldBe` ["photo"]
 
+-- InlineQueryResult examples
 message_content :: InputMessageContent
 message_content = InputTextMessageContent "test message content" Nothing Nothing
 

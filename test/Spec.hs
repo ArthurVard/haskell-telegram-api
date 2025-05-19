@@ -80,8 +80,30 @@ runIntegrationSpec (Just token) (Just chatId) (Just botName) (Just paymentToken)
         describe "Updates API spec" $ UpdatesSpec.spec token botName
         describe "Stickers API spec" $ StickersSpec.spec token chatId botName
             --describe "Inline integration tests" $ InlineSpec.spec token chatId botName
-runIntegrationSpec _ _ _ _ = describe "Integration tests" $
-        fail "Missing required arguments for integration tests. Run stack test --test-arguments \"--help\" for more info"
+-- runIntegrationSpec _ _ _ _ = describe "Integration tests" $
+--          fail "Missing required arguments for integration tests. Run stack test --test-arguments \"--help\" for more info"
+
+-- test\Spec.hs:84:9: error: [GHC-39999]
+--     * No instance for `MonadFail
+--                          (hspec-core-2.11.12:Test.Hspec.Core.Spec.Monad.SpecM ())'
+--         arising from a use of `fail'
+--     * In the second argument of `($)', namely
+--         `fail
+--            "Missing required arguments for integration tests. Run stack test --test-arguments \"--help\" for more info"'
+--       In the expression:
+--         describe "Integration tests"
+--           $ fail
+--               "Missing required arguments for integration tests. Run stack test --test-arguments \"--help\" for more info"
+--       In an equation for `runIntegrationSpec':
+--           runIntegrationSpec _ _ _ _
+--             = describe "Integration tests"
+--                 $ fail
+--                     "Missing required arguments for integration tests. Run stack test --test-arguments \"--help\" for more info"
+--    |
+-- 84 |         fail "Missing required arguments for integration tests. Run stack test --test-arguments \"--help\" for more info"
+--    |         ^^^^
+-- Progress 1/2
+
 
 description ::  Maybe PP.Doc
 description = Just $
