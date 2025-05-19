@@ -78,7 +78,6 @@ test-suite telegram-api-test
                      , TestCore
   build-depends:       base
                      , aeson
-                     , hjpath
                      , ansi-wl-pprint
                      , http-client
                      , http-client-tls
